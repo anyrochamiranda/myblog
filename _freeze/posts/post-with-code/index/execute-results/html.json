@@ -1,0 +1,12 @@
+{
+  "hash": "28772eaa6c74ed5ee86cacd6154109ab",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Cotação do Dólar\"\nauthor: \"Anielly Miranda\"\ndate: \"2025-11-20\"\ncategories: [API, code ]\nimage: \"image.jpg\"\n---\n\n 📈Explorando a cotação do dólar!\n Consulta a API do Banco Central.\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

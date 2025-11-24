@@ -1,0 +1,16 @@
+---
+title: "Regressão Linear"
+author: "Anielly Miranda"
+date: "2025-11-20"
+categories: [code, regressão linear]
+jupyter: python3
+---
+
+Analisando dados com regressão linear! 📊
+Aqui, explorei a relação entre anos de estudo e salário utilizando a fórmula matricial para calcular os coeficientes. O resultado? Um gráfico com os pontos e a reta estimada, mostrando como estatística e programação andam juntas."
+
+
+```{python}
+
+```
+

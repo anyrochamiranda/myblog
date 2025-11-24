@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>myblog</title>
+<link>https://your-website-url.example.com/</link>
+<atom:link href="https://your-website-url.example.com/index.xml" rel="self" type="application/rss+xml"/>
+<description>A blog built with Quarto</description>
+<generator>quarto-1.8.26</generator>
+<lastBuildDate>Thu, 20 Nov 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Cotação do Dólar</title>
+  <dc:creator>Anielly Miranda</dc:creator>
+  <link>https://your-website-url.example.com/posts/post-with-code/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>📈Explorando a cotação do dólar! Consulta a API do Banco Central.</p>
+
+
+
+ ]]></description>
+  <category>API</category>
+  <category>code</category>
+  <guid>https://your-website-url.example.com/posts/post-with-code/</guid>
+  <pubDate>Thu, 20 Nov 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://your-website-url.example.com/posts/post-with-code/image.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Regressão Linear</title>
+  <dc:creator>Anielly Miranda</dc:creator>
+  <link>https://your-website-url.example.com/posts/welcome/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Analisando dados com regressão linear! 📊 Aqui, explorei a relação entre anos de estudo e salário utilizando a fórmula matricial para calcular os coeficientes. O resultado? Um gráfico com os pontos e a reta estimada, mostrando como estatística e programação andam juntas.”</p>
+
+
+
+ ]]></description>
+  <category>code</category>
+  <category>regressão linear</category>
+  <guid>https://your-website-url.example.com/posts/welcome/</guid>
+  <pubDate>Thu, 20 Nov 2025 00:00:00 GMT</pubDate>
+</item>
+</channel>
+</rss>

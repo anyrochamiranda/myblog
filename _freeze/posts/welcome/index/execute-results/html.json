@@ -1,0 +1,12 @@
+{
+  "hash": "df99d12627901f11d47ede4364b1e700",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Regressão Linear\"\nauthor: \"Anielly Miranda\"\ndate: \"2025-11-20\"\ncategories: [code, regressão linear]\njupyter: python3\n---\n\nAnalisando dados com regressão linear! 📊\nAqui, explorei a relação entre anos de estudo e salário utilizando a fórmula matricial para calcular os coeficientes. O resultado? Um gráfico com os pontos e a reta estimada, mostrando como estatística e programação andam juntas.\"\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

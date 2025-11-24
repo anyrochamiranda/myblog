@@ -1,0 +1,15 @@
+---
+title: "Cotação do Dólar"
+author: "Anielly Miranda"
+date: "2025-11-20"
+categories: [API, code ]
+image: "image.jpg"
+---
+
+ 📈Explorando a cotação do dólar!
+ Consulta a API do Banco Central.
+
+
+ ```{python}
+
+ ```
