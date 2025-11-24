@@ -7,10 +7,40 @@ jupyter: python3
 ---
 
 Analisando dados com regressão linear! 📊
-Aqui, explorei a relação entre anos de estudo e salário utilizando a fórmula matricial para calcular os coeficientes. O resultado? Um gráfico com os pontos e a reta estimada, mostrando como estatística e programação andam juntas."
+Aqui, explorei a relação entre anos de estudo e salário utilizando a fórmula matricial para calcular os coeficientes. O resultado? Um gráfico com os pontos e a reta estimada, mostrando como estatística e programação andam juntas.
 
+# Importa a biblioteca necessária para fazer requisições HTTP
+import requests
 
-```{python}
+# URL base da API PTAX
+base_url = "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/"
+# Endpoint que retorna a cotação do dólar em um período
+endpoint = "CotacaoDolarPeriodo"
 
-```
+# Parâmetros da consulta
+params = {
+    "dataInicial": "08-01-2021",       # Data inicial (MM-DD-YYYY)
+    "dataFinalCotacao": "08-31-2021",  # Data final (MM-DD-YYYY)
+    "top": 1000,                       # Número máximo de registros
+    "format": "json"                   # Formato da resposta
+}
 
+# Monta a URL completa usando f-string
+url = f"{base_url}{endpoint}(dataInicial='{params['dataInicial']}',dataFinalCotacao='{params['dataFinalCotacao']}',top={params['top']},format='{params['format']}')"
+
+# Faz a requisição GET para a API
+response = requests.get(url)
+
+# Verifica se a requisição foi bem-sucedida (status 200)
+if response.status_code == 200:
+    # Converte a resposta para JSON
+    dados = response.json()
+    print("Cotação do dólar no período:")
+    
+    # Percorre a lista de cotações dentro da chave 'value'
+    for item in dados.get("value", []):
+        # Exibe data, cotação de compra e venda
+        print(f"Data: {item['dataHoraCotacao']} | Compra: {item['cotacaoCompra']} | Venda: {item['cotacaoVenda']}")
+else:
+    # Caso ocorra erro, exibe o código de status
+    print(f"Erro na requisição: {response.status_code}")
