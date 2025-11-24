@@ -20,5 +20,9 @@ format:
       - brand
     css: styles.css
 
+execute:
+  kernel: python3
+  python: .venv/bin/python
+
 
 

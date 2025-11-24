@@ -22,10 +22,45 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -70,6 +105,15 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script type="text/javascript">
+window.PlotlyConfig = {MathJaxConfig: 'local'};
+if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+</script>
+<script type="module">import "https://cdn.plot.ly/plotly-3.2.0.min"</script>
+
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -157,35 +201,158 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>📈Explorando a cotação do dólar! Consulta a API do Banco Central.</p>
-<p># Importa a biblioteca necessária para fazer requisições HTTP import requests</p>
-<section id="url-base-da-api-ptax" class="level1">
-<h1>URL base da API PTAX</h1>
-<p>base_url = “https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/” # Endpoint que retorna a cotação do dólar em um período endpoint = “CotacaoDolarPeriodo”</p>
-</section>
-<section id="parâmetros-da-consulta" class="level1">
-<h1>Parâmetros da consulta</h1>
-<p>params = { “dataInicial”: “08-01-2021”, # Data inicial (MM-DD-YYYY) “dataFinalCotacao”: “08-31-2021”, # Data final (MM-DD-YYYY) “top”: 1000, # Número máximo de registros “format”: “json” # Formato da resposta }</p>
-</section>
-<section id="monta-a-url-completa-usando-f-string" class="level1">
-<h1>Monta a URL completa usando f-string</h1>
-<p>url = f”{base_url}{endpoint}(dataInicial=‘{params[’dataInicial’]}’,dataFinalCotacao=‘{params[’dataFinalCotacao’]}’,top={params[‘top’]},format=‘{params[’format’]}’)”</p>
-</section>
-<section id="faz-a-requisição-get-para-a-api" class="level1">
-<h1>Faz a requisição GET para a API</h1>
-<p>response = requests.get(url)</p>
-</section>
-<section id="verifica-se-a-requisição-foi-bem-sucedida-status-200" class="level1">
-<h1>Verifica se a requisição foi bem-sucedida (status 200)</h1>
-<p>if response.status_code == 200: # Converte a resposta para JSON dados = response.json() print(“Cotação do dólar no período:”)</p>
-<pre><code># Percorre a lista de cotações dentro da chave 'value'
-for item in dados.get("value", []):
-    # Exibe data, cotação de compra e venda
-    print(f"Data: {item['dataHoraCotacao']} | Compra: {item['cotacaoCompra']} | Venda: {item['cotacaoVenda']}")</code></pre>
-<p>else: # Caso ocorra erro, exibe o código de status print(f”Erro na requisição: {response.status_code}“)</p>
+<p>Explorando a cotação do dólar! Consulta a API do Banco Central.</p>
+<p>Nesta atividade eu criei uma rotina em Python que consulta a cotação do dólar comercial em um determinado mês e ano, usando a API do Banco Central (PTAX) e exibe os resultados em um gráfico de linha interativo com o Plotly.</p>
+<ol type="1">
+<li>Instalei as bibliotecas necessárias</li>
+</ol>
+<p>Antes de tudo, precisei instalar algumas bibliotecas que o código utiliza:</p>
+<div id="da85abde" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pip install requests pandas plotly</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Requirement already satisfied: requests in /home/codespace/.local/lib/python3.12/site-packages (2.32.5)
+Requirement already satisfied: pandas in /home/codespace/.local/lib/python3.12/site-packages (2.3.3)
+Requirement already satisfied: plotly in /home/codespace/.local/lib/python3.12/site-packages (6.4.0)
+Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /home/codespace/.local/lib/python3.12/site-packages (from requests) (3.4.4)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /home/codespace/.local/lib/python3.12/site-packages (from requests) (3.11)
+Requirement already satisfied: urllib3&lt;3,&gt;=1.21.1 in /home/codespace/.local/lib/python3.12/site-packages (from requests) (2.5.0)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /home/codespace/.local/lib/python3.12/site-packages (from requests) (2025.10.5)
+Requirement already satisfied: numpy&gt;=1.26.0 in /home/codespace/.local/lib/python3.12/site-packages (from pandas) (2.3.4)
+Requirement already satisfied: python-dateutil&gt;=2.8.2 in /home/codespace/.local/lib/python3.12/site-packages (from pandas) (2.9.0.post0)
+Requirement already satisfied: pytz&gt;=2020.1 in /home/codespace/.local/lib/python3.12/site-packages (from pandas) (2025.2)
+Requirement already satisfied: tzdata&gt;=2022.7 in /home/codespace/.local/lib/python3.12/site-packages (from pandas) (2025.2)
+Requirement already satisfied: narwhals&gt;=1.15.1 in /home/codespace/.local/lib/python3.12/site-packages (from plotly) (2.10.2)
+Requirement already satisfied: packaging in /home/codespace/.local/lib/python3.12/site-packages (from plotly) (25.0)
+Requirement already satisfied: six&gt;=1.5 in /home/codespace/.local/lib/python3.12/site-packages (from python-dateutil&gt;=2.8.2-&gt;pandas) (1.17.0)
+Note: you may need to restart the kernel to use updated packages.</code></pre>
+</div>
+</div>
+<p>requests → para acessar a API do Banco Central</p>
+<p>pandas → para organizar os dados e tratar a tabela</p>
+<p>plotly → para criar o gráfico de linha interativo</p>
+<ol start="2" type="1">
+<li>Função principal</li>
+</ol>
+<p>Depois disso, criei uma função chamada cotacao_dolar_periodo() que recebe uma string com o mês e o ano no formato “MMYYYY”, por exemplo “082021”. A função consulta as cotações de todos os dias daquele mês e mostra o gráfico.</p>
+<div id="ea62f1b6" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> calendar</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime, timedelta</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cotacao_dolar_periodo(mes_ano: <span class="bu">str</span>):</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">    Recebe uma string no formato 'MMYYYY' (ex: '082021') e retorna um gráfico de linha</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">    com a cotação do dólar comercial (compra e venda) no período.</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Converter o texto para data e descobrir o primeiro e o último dia do mês</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    data_inicial <span class="op">=</span> datetime.strptime(mes_ano, <span class="st">"%m%Y"</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    ultimo_dia <span class="op">=</span> calendar.monthrange(data_inicial.year, data_inicial.month)[<span class="dv">1</span>]</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    data_final <span class="op">=</span> data_inicial.replace(day<span class="op">=</span>ultimo_dia)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ajustar o formato da data para o padrão da API (MM-DD-YYYY)</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    data_inicial_str <span class="op">=</span> data_inicial.strftime(<span class="st">"%m-</span><span class="sc">%d</span><span class="st">-%Y"</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    data_final_str <span class="op">=</span> data_final.strftime(<span class="st">"%m-</span><span class="sc">%d</span><span class="st">-%Y"</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># URL da API do Banco Central (Cotação do Dólar por Período)</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> (</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/"</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"CotacaoDolarPeriodo(dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?"</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"@dataInicial='</span><span class="sc">{</span>data_inicial_str<span class="sc">}</span><span class="ss">'&amp;@dataFinalCotacao='</span><span class="sc">{</span>data_final_str<span class="sc">}</span><span class="ss">'&amp;"</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">"$format=json&amp;$select=cotacaoCompra,cotacaoVenda,dataHoraCotacao"</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fazer a requisição</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> requests.get(url)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> response.status_code <span class="op">!=</span> <span class="dv">200</span>:</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Erro ao acessar API do Banco Central."</span>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    dados <span class="op">=</span> response.json().get(<span class="st">"value"</span>, [])</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Converter o resultado em um DataFrame</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(dados)</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> df.empty:</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Nenhum dado encontrado para o período informado."</span>)</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Converter a coluna de data e ordenar</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"dataHoraCotacao"</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">"dataHoraCotacao"</span>])</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.sort_values(<span class="st">"dataHoraCotacao"</span>)</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Preencher dias sem cotação (feriados ou fins de semana) com o valor anterior</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.set_index(<span class="st">"dataHoraCotacao"</span>).asfreq(<span class="st">"D"</span>, method<span class="op">=</span><span class="st">"ffill"</span>).reset_index()</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Criar o gráfico com Plotly</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> px.line(</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>        df,</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">"dataHoraCotacao"</span>,</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>[<span class="st">"cotacaoCompra"</span>, <span class="st">"cotacaoVenda"</span>],</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="ss">f"Cotação do Dólar - </span><span class="sc">{</span>data_inicial<span class="sc">.</span>strftime(<span class="st">'%B/%Y'</span>)<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>        labels<span class="op">=</span>{</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>            <span class="st">"dataHoraCotacao"</span>: <span class="st">"Data"</span>,</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>            <span class="st">"value"</span>: <span class="st">"Cotação (R$)"</span>,</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>            <span class="st">"variable"</span>: <span class="st">"Tipo de Cotação"</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ajustes visuais</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>    fig.update_layout(</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>        title_x<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>        legend_title_text<span class="op">=</span><span class="st">""</span>,</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>        template<span class="op">=</span><span class="st">"plotly_white"</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Exibir o gráfico</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>    fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ol start="3" type="1">
+<li>Executando o código</li>
+</ol>
+<p>Para testar, basta chamar a função passando o mês e o ano desejados:</p>
+<div id="f832f7d1" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cotacao_dolar_periodo(<span class="st">"082021"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.2.0.min.js" integrity="sha256-iZ2u/oU2wf/vDbl/ChcX93WgbBRSBvUO6N413hDz7xM=" crossorigin="anonymous"></script>                <div id="d36b47ff-7297-42d8-806c-70fd2dcdfb7e" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("d36b47ff-7297-42d8-806c-70fd2dcdfb7e")) {                    Plotly.newPlot(                        "d36b47ff-7297-42d8-806c-70fd2dcdfb7e",                        [{"hovertemplate":"Tipo de Cotação=cotacaoCompra\u003cbr\u003eData=%{x}\u003cbr\u003eCotação (R$)=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"cotacaoCompra","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"cotacaoCompra","orientation":"v","showlegend":true,"x":["2021-08-02T13:02:33.944000","2021-08-03T13:02:33.944000","2021-08-04T13:02:33.944000","2021-08-05T13:02:33.944000","2021-08-06T13:02:33.944000","2021-08-07T13:02:33.944000","2021-08-08T13:02:33.944000","2021-08-09T13:02:33.944000","2021-08-10T13:02:33.944000","2021-08-11T13:02:33.944000","2021-08-12T13:02:33.944000","2021-08-13T13:02:33.944000","2021-08-14T13:02:33.944000","2021-08-15T13:02:33.944000","2021-08-16T13:02:33.944000","2021-08-17T13:02:33.944000","2021-08-18T13:02:33.944000","2021-08-19T13:02:33.944000","2021-08-20T13:02:33.944000","2021-08-21T13:02:33.944000","2021-08-22T13:02:33.944000","2021-08-23T13:02:33.944000","2021-08-24T13:02:33.944000","2021-08-25T13:02:33.944000","2021-08-26T13:02:33.944000","2021-08-27T13:02:33.944000","2021-08-28T13:02:33.944000","2021-08-29T13:02:33.944000","2021-08-30T13:02:33.944000","2021-08-31T13:02:33.944000"],"xaxis":"x","y":{"dtype":"f8","bdata":"lPYGX5iMFECU9gZfmIwUQF1txf6y+xRAL90kBoHVFEAT8kHPZpUUQGfV52or9hRAZ9Xnaiv2FEBn1edqK\u002fYUQJYhjnVxGxVAGJXUCWjiFECTOgFNhM0UQOOlm8Qg8BRAeJyiI7n8FEB4nKIjufwUQHicoiO5\u002fBRAyeU\u002fpN\u002f+FEC5jQbwFggVQEymCkYlNRVAz2bV52qrFUAwuycPC7UVQDC7Jw8LtRVAMLsnDwu1FUBGtvP91HgVQGpN845TNBVAeVioNc37FECASL99HfgUQDj4wmSq4BRAOPjCZKrgFEA4+MJkquAUQNc07zhFxxRA"},"yaxis":"y","type":"scatter"},{"hovertemplate":"Tipo de Cotação=cotacaoVenda\u003cbr\u003eData=%{x}\u003cbr\u003eCotação (R$)=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"cotacaoVenda","line":{"color":"#EF553B","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"cotacaoVenda","orientation":"v","showlegend":true,"x":["2021-08-02T13:02:33.944000","2021-08-03T13:02:33.944000","2021-08-04T13:02:33.944000","2021-08-05T13:02:33.944000","2021-08-06T13:02:33.944000","2021-08-07T13:02:33.944000","2021-08-08T13:02:33.944000","2021-08-09T13:02:33.944000","2021-08-10T13:02:33.944000","2021-08-11T13:02:33.944000","2021-08-12T13:02:33.944000","2021-08-13T13:02:33.944000","2021-08-14T13:02:33.944000","2021-08-15T13:02:33.944000","2021-08-16T13:02:33.944000","2021-08-17T13:02:33.944000","2021-08-18T13:02:33.944000","2021-08-19T13:02:33.944000","2021-08-20T13:02:33.944000","2021-08-21T13:02:33.944000","2021-08-22T13:02:33.944000","2021-08-23T13:02:33.944000","2021-08-24T13:02:33.944000","2021-08-25T13:02:33.944000","2021-08-26T13:02:33.944000","2021-08-27T13:02:33.944000","2021-08-28T13:02:33.944000","2021-08-29T13:02:33.944000","2021-08-30T13:02:33.944000","2021-08-31T13:02:33.944000"],"xaxis":"x","y":{"dtype":"f8","bdata":"PnlYqDWNFEA+eVioNY0UQAfwFkhQ\u002fBRA2V92Tx7WFECgibDh6ZUUQBBYObTI9hRAEFg5tMj2FEAQWDm0yPYUQECk374OHBVAwhcmUwXjFEA8vVKWIc4UQI0o7Q2+8BRAIR\u002f0bFb9FEAhH\u002fRsVv0UQCEf9GxW\u002fRRAc2iR7Xz\u002fFEBiEFg5tAgVQPYoXI\u002fCNRVAeekmMQisFUDZPXlYqLUVQNk9eViotRVA2T15WKi1FUDvOEVHcnkVQBTQRNjwNBVAI9v5fmr8FEApyxDHuvgUQOF6FK5H4RRA4XoUrkfhFEDhehSuR+EUQIC3QILixxRA"},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Data"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Cotação (R$)"}},"legend":{"title":{"text":""},"tracegroupgap":0},"title":{"text":"Cotação do Dólar - August\u002f2021","x":0.5}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('d36b47ff-7297-42d8-806c-70fd2dcdfb7e');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+<p>Isso vai gerar um gráfico interativo mostrando a variação da cotação de compra e venda do dólar ao longo de agosto de 2021.</p>
+<ol start="4" type="1">
+<li>O que o código faz automaticamente</li>
+</ol>
+<p>Calcula o primeiro e o último dia do mês informado.</p>
+<p>Monta a URL da API PTAX do Banco Central com essas datas.</p>
+<p>Busca as cotações diárias de compra e venda.</p>
+<p>Preenche dias sem cotação (como finais de semana e feriados) com o valor do dia anterior.</p>
+<p>Cria um gráfico interativo com as duas linhas (compra e venda).</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

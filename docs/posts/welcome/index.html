@@ -9,7 +9,7 @@
 <meta name="author" content="Anielly Miranda">
 <meta name="dcterms.date" content="2025-11-20">
 
-<title>Regressão Linear – myblog</title>
+<title>Monitoramento de frota de ônibus – myblog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -117,10 +152,10 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Regressão Linear</h1>
+      <h1 class="title">Monitoramento de frota de ônibus</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">code</div>
-                <div class="quarto-category">regressão linear</div>
+                <div class="quarto-category">monitoramento dos ônibus</div>
               </div>
                   </div>
   </div>
@@ -157,38 +192,86 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>Analisando dados com regressão linear! 📊 Aqui, explorei a relação entre anos de estudo e salário utilizando a fórmula matricial para calcular os coeficientes. O resultado? Um gráfico com os pontos e a reta estimada, mostrando como estatística e programação andam juntas.</p>
-<section id="importa-a-biblioteca-necessária-para-fazer-requisições-http" class="level1">
-<h1>Importa a biblioteca necessária para fazer requisições HTTP</h1>
-<p>import requests</p>
-</section>
-<section id="url-base-da-api-ptax" class="level1">
-<h1>URL base da API PTAX</h1>
-<p>base_url = “https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/” # Endpoint que retorna a cotação do dólar em um período endpoint = “CotacaoDolarPeriodo”</p>
-</section>
-<section id="parâmetros-da-consulta" class="level1">
-<h1>Parâmetros da consulta</h1>
-<p>params = { “dataInicial”: “08-01-2021”, # Data inicial (MM-DD-YYYY) “dataFinalCotacao”: “08-31-2021”, # Data final (MM-DD-YYYY) “top”: 1000, # Número máximo de registros “format”: “json” # Formato da resposta }</p>
-</section>
-<section id="monta-a-url-completa-usando-f-string" class="level1">
-<h1>Monta a URL completa usando f-string</h1>
-<p>url = f”{base_url}{endpoint}(dataInicial=‘{params[’dataInicial’]}’,dataFinalCotacao=‘{params[’dataFinalCotacao’]}’,top={params[‘top’]},format=‘{params[’format’]}’)”</p>
-</section>
-<section id="faz-a-requisição-get-para-a-api" class="level1">
-<h1>Faz a requisição GET para a API</h1>
-<p>response = requests.get(url)</p>
-</section>
-<section id="verifica-se-a-requisição-foi-bem-sucedida-status-200" class="level1">
-<h1>Verifica se a requisição foi bem-sucedida (status 200)</h1>
-<p>if response.status_code == 200: # Converte a resposta para JSON dados = response.json() print(“Cotação do dólar no período:”)</p>
-<pre><code># Percorre a lista de cotações dentro da chave 'value'
-for item in dados.get("value", []):
-    # Exibe data, cotação de compra e venda
-    print(f"Data: {item['dataHoraCotacao']} | Compra: {item['cotacaoCompra']} | Venda: {item['cotacaoVenda']}")</code></pre>
-<p>else: # Caso ocorra erro, exibe o código de status print(f”Erro na requisição: {response.status_code}“)</p>
+<p>Mapeando a mobilidade urbana! Nesta atividade, construí um mapa interativo com as paradas de uma linha de ônibus e a posição em tempo real dos veículos.</p>
+<div id="6b50000f" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> folium</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>load_dotenv()</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>TOKEN <span class="op">=</span> os.getenv(<span class="st">"TOKEN_SPTRANS"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>URL_BASE <span class="op">=</span> <span class="st">"https://api.olhovivo.sptrans.com.br/v2.1"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> TOKEN:</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"❌ Token SPTrans não encontrado."</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Cria uma sessão persistente</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>sess <span class="op">=</span> requests.Session()</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 1️⃣ Autenticação</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>login_url <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>URL_BASE<span class="sc">}</span><span class="ss">/Login/Autenticar?token=</span><span class="sc">{</span>TOKEN<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>auth <span class="op">=</span> sess.post(login_url)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> auth.status_code <span class="op">!=</span> <span class="dv">200</span> <span class="kw">or</span> auth.json() <span class="kw">is</span> <span class="kw">not</span> <span class="va">True</span>:</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">Exception</span>(<span class="ss">f"❌ Falha na autenticação (</span><span class="sc">{</span>auth<span class="sc">.</span>status_code<span class="sc">}</span><span class="ss">): </span><span class="sc">{</span>auth<span class="sc">.</span>text<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"✅ Autenticação bem-sucedida!"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 2️⃣ Buscar a linha</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>numero_linha <span class="op">=</span> <span class="st">"875A-10"</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>busca_linha_url <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>URL_BASE<span class="sc">}</span><span class="ss">/Linha/Buscar?termosBusca=</span><span class="sc">{</span>numero_linha<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>resp_linha <span class="op">=</span> sess.get(busca_linha_url)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> resp_linha.status_code <span class="op">!=</span> <span class="dv">200</span> <span class="kw">or</span> <span class="kw">not</span> resp_linha.json():</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">Exception</span>(<span class="ss">f"❌ Linha não encontrada. Status: </span><span class="sc">{</span>resp_linha<span class="sc">.</span>status_code<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>linha <span class="op">=</span> resp_linha.json()[<span class="dv">0</span>]</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>codigo_linha <span class="op">=</span> linha[<span class="st">"cl"</span>]</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>nome_linha <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>linha[<span class="st">'lt'</span>]<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>linha[<span class="st">'tp'</span>]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"🚍 Linha encontrada: </span><span class="sc">{</span>nome_linha<span class="sc">}</span><span class="ss"> (Código </span><span class="sc">{</span>codigo_linha<span class="sc">}</span><span class="ss">)"</span>)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co"># 3️⃣ Buscar paradas</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>paradas_url <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>URL_BASE<span class="sc">}</span><span class="ss">/Parada/BuscarParadasPorLinha?codigoLinha=</span><span class="sc">{</span>codigo_linha<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>resp_paradas <span class="op">=</span> sess.get(paradas_url)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>paradas <span class="op">=</span> resp_paradas.json()</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"📍 </span><span class="sc">{</span><span class="bu">len</span>(paradas)<span class="sc">}</span><span class="ss"> paradas encontradas."</span>)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>lats <span class="op">=</span> [p[<span class="st">"py"</span>] <span class="cf">for</span> p <span class="kw">in</span> paradas]</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>lons <span class="op">=</span> [p[<span class="st">"px"</span>] <span class="cf">for</span> p <span class="kw">in</span> paradas]</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>centro <span class="op">=</span> (<span class="bu">sum</span>(lats)<span class="op">/</span><span class="bu">len</span>(lats), <span class="bu">sum</span>(lons)<span class="op">/</span><span class="bu">len</span>(lons))</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>mapa <span class="op">=</span> folium.Map(location<span class="op">=</span>centro, zoom_start<span class="op">=</span><span class="dv">12</span>)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> paradas:</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    folium.Marker(</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        location<span class="op">=</span>(p[<span class="st">"py"</span>], p[<span class="st">"px"</span>]),</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        popup<span class="op">=</span>p[<span class="st">"np"</span>],</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>        icon<span class="op">=</span>folium.Icon(color<span class="op">=</span><span class="st">"blue"</span>)</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    ).add_to(mapa)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="co"># 4️⃣ Posições em tempo real</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>posicao_url <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>URL_BASE<span class="sc">}</span><span class="ss">/Posicao/Linha?codigoLinha=</span><span class="sc">{</span>codigo_linha<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>resp_posicao <span class="op">=</span> sess.get(posicao_url)</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>dados <span class="op">=</span> resp_posicao.json()</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>veiculos <span class="op">=</span> dados.get(<span class="st">"vs"</span>, [])</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"🚦 </span><span class="sc">{</span><span class="bu">len</span>(veiculos)<span class="sc">}</span><span class="ss"> veículos em tempo real."</span>)</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> v <span class="kw">in</span> veiculos:</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>    folium.Marker(</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>        location<span class="op">=</span>(v[<span class="st">"py"</span>], v[<span class="st">"px"</span>]),</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>        popup<span class="op">=</span><span class="ss">f"Veículo: </span><span class="sc">{</span>v[<span class="st">'p'</span>]<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>        icon<span class="op">=</span>folium.Icon(color<span class="op">=</span><span class="st">"red"</span>)</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    ).add_to(mapa)</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>mapa.save(<span class="st">"mapa_875A10.html"</span>)</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"🗺️ Mapa salvo como mapa_875A10.html"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>✅ Autenticação bem-sucedida!
+🚍 Linha encontrada: 875A - PERDIZES (Código 609)
+📍 7 paradas encontradas.
+🚦 0 veículos em tempo real.
+🗺️ Mapa salvo como mapa_875A10.html</code></pre>
+</div>
+</div>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

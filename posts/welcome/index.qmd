@@ -1,46 +1,85 @@
 ---
-title: "Regressão Linear"
+title: "Monitoramento de frota de ônibus"
 author: "Anielly Miranda"
 date: "2025-11-20"
-categories: [code, regressão linear]
+categories: [code, monitoramento dos ônibus]
 jupyter: python3
+image: "onibus.png"
 ---
 
-Analisando dados com regressão linear! 📊
-Aqui, explorei a relação entre anos de estudo e salário utilizando a fórmula matricial para calcular os coeficientes. O resultado? Um gráfico com os pontos e a reta estimada, mostrando como estatística e programação andam juntas.
+Mapeando a mobilidade urbana! 
+Nesta atividade, construí um mapa interativo com as paradas de uma linha de ônibus e a posição em tempo real dos veículos. 
 
-# Importa a biblioteca necessária para fazer requisições HTTP
+
+```{python}
 import requests
+import folium
+import os
+from dotenv import load_dotenv
 
-# URL base da API PTAX
-base_url = "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/"
-# Endpoint que retorna a cotação do dólar em um período
-endpoint = "CotacaoDolarPeriodo"
+load_dotenv()
+TOKEN = os.getenv("TOKEN_SPTRANS")
+URL_BASE = "https://api.olhovivo.sptrans.com.br/v2.1"
 
-# Parâmetros da consulta
-params = {
-    "dataInicial": "08-01-2021",       # Data inicial (MM-DD-YYYY)
-    "dataFinalCotacao": "08-31-2021",  # Data final (MM-DD-YYYY)
-    "top": 1000,                       # Número máximo de registros
-    "format": "json"                   # Formato da resposta
-}
+if not TOKEN:
+    raise ValueError("❌ Token SPTrans não encontrado.")
 
-# Monta a URL completa usando f-string
-url = f"{base_url}{endpoint}(dataInicial='{params['dataInicial']}',dataFinalCotacao='{params['dataFinalCotacao']}',top={params['top']},format='{params['format']}')"
+# Cria uma sessão persistente
+sess = requests.Session()
 
-# Faz a requisição GET para a API
-response = requests.get(url)
+# 1️⃣ Autenticação
+login_url = f"{URL_BASE}/Login/Autenticar?token={TOKEN}"
+auth = sess.post(login_url)
+if auth.status_code != 200 or auth.json() is not True:
+    raise Exception(f"❌ Falha na autenticação ({auth.status_code}): {auth.text}")
+print("✅ Autenticação bem-sucedida!")
 
-# Verifica se a requisição foi bem-sucedida (status 200)
-if response.status_code == 200:
-    # Converte a resposta para JSON
-    dados = response.json()
-    print("Cotação do dólar no período:")
-    
-    # Percorre a lista de cotações dentro da chave 'value'
-    for item in dados.get("value", []):
-        # Exibe data, cotação de compra e venda
-        print(f"Data: {item['dataHoraCotacao']} | Compra: {item['cotacaoCompra']} | Venda: {item['cotacaoVenda']}")
-else:
-    # Caso ocorra erro, exibe o código de status
-    print(f"Erro na requisição: {response.status_code}")
+# 2️⃣ Buscar a linha
+numero_linha = "875A-10"
+busca_linha_url = f"{URL_BASE}/Linha/Buscar?termosBusca={numero_linha}"
+resp_linha = sess.get(busca_linha_url)
+if resp_linha.status_code != 200 or not resp_linha.json():
+    raise Exception(f"❌ Linha não encontrada. Status: {resp_linha.status_code}")
+
+linha = resp_linha.json()[0]
+codigo_linha = linha["cl"]
+nome_linha = f"{linha['lt']} - {linha['tp']}"
+print(f"🚍 Linha encontrada: {nome_linha} (Código {codigo_linha})")
+
+# 3️⃣ Buscar paradas
+paradas_url = f"{URL_BASE}/Parada/BuscarParadasPorLinha?codigoLinha={codigo_linha}"
+resp_paradas = sess.get(paradas_url)
+paradas = resp_paradas.json()
+
+print(f"📍 {len(paradas)} paradas encontradas.")
+lats = [p["py"] for p in paradas]
+lons = [p["px"] for p in paradas]
+centro = (sum(lats)/len(lats), sum(lons)/len(lons))
+mapa = folium.Map(location=centro, zoom_start=12)
+
+for p in paradas:
+    folium.Marker(
+        location=(p["py"], p["px"]),
+        popup=p["np"],
+        icon=folium.Icon(color="blue")
+    ).add_to(mapa)
+
+# 4️⃣ Posições em tempo real
+posicao_url = f"{URL_BASE}/Posicao/Linha?codigoLinha={codigo_linha}"
+resp_posicao = sess.get(posicao_url)
+dados = resp_posicao.json()
+veiculos = dados.get("vs", [])
+print(f"🚦 {len(veiculos)} veículos em tempo real.")
+
+for v in veiculos:
+    folium.Marker(
+        location=(v["py"], v["px"]),
+        popup=f"Veículo: {v['p']}",
+        icon=folium.Icon(color="red")
+    ).add_to(mapa)
+
+mapa.save("mapa_875A10.html")
+print("🗺️ Mapa salvo como mapa_875A10.html")
+
+```
+

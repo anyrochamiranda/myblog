@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_3f9c8acf22e74137213606f8dc6491b3 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_3f9c8acf22e74137213606f8dc6491b3" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_3f9c8acf22e74137213606f8dc6491b3 = L.map(
+                "map_3f9c8acf22e74137213606f8dc6491b3",
+                {
+                    center: [-23.540708857142857, -46.65477214285715],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 12,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_2e21a9352645e13a7044fa44b1bc762f = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_2e21a9352645e13a7044fa44b1bc762f.addTo(map_3f9c8acf22e74137213606f8dc6491b3);
+        
+    
+            var marker_62754c8828141623095dd911171f29c1 = L.marker(
+                [-23.534377, -46.654322],
+                {
+}
+            ).addTo(map_3f9c8acf22e74137213606f8dc6491b3);
+        
+    
+            var icon_b907286376495e1e8af9c9f14e7e59fb = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c412750ccc372ff1101d5fb89804c054 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_733dc3ebcce5e4a5aa76133c9f171ca6 = $(`<div id="html_733dc3ebcce5e4a5aa76133c9f171ca6" style="width: 100.0%; height: 100.0%;">ANGELICA C/B</div>`)[0];
+                popup_c412750ccc372ff1101d5fb89804c054.setContent(html_733dc3ebcce5e4a5aa76133c9f171ca6);
+            
+        
+
+        marker_62754c8828141623095dd911171f29c1.bindPopup(popup_c412750ccc372ff1101d5fb89804c054)
+        ;
+
+        
+    
+    
+                marker_62754c8828141623095dd911171f29c1.setIcon(icon_b907286376495e1e8af9c9f14e7e59fb);
+            
+    
+            var marker_36056f872c67343c33000141b8538068 = L.marker(
+                [-23.551843, -46.657399],
+                {
+}
+            ).addTo(map_3f9c8acf22e74137213606f8dc6491b3);
+        
+    
+            var icon_82f3e5e7e0517bd852ed99e89d168079 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_88770ef4d094337fc1d804ac1f61384a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d39bfcc33402804a9fbfeb9b12534795 = $(`<div id="html_d39bfcc33402804a9fbfeb9b12534795" style="width: 100.0%; height: 100.0%;">PEDRO TAQUES B/C</div>`)[0];
+                popup_88770ef4d094337fc1d804ac1f61384a.setContent(html_d39bfcc33402804a9fbfeb9b12534795);
+            
+        
+
+        marker_36056f872c67343c33000141b8538068.bindPopup(popup_88770ef4d094337fc1d804ac1f61384a)
+        ;
+
+        
+    
+    
+                marker_36056f872c67343c33000141b8538068.setIcon(icon_82f3e5e7e0517bd852ed99e89d168079);
+            
+    
+            var marker_6c624b24b4981d034d0eced23b96f107 = L.marker(
+                [-23.549577, -46.653216],
+                {
+}
+            ).addTo(map_3f9c8acf22e74137213606f8dc6491b3);
+        
+    
+            var icon_9741d475ac449f68cde47994a0159418 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_49a600645b4fa6511fae13a58396ae66 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1eb26ab64eaf3fe6edcfd1ec77037248 = $(`<div id="html_1eb26ab64eaf3fe6edcfd1ec77037248" style="width: 100.0%; height: 100.0%;">ANTÔNIA DE QUEIRÓS - B/C</div>`)[0];
+                popup_49a600645b4fa6511fae13a58396ae66.setContent(html_1eb26ab64eaf3fe6edcfd1ec77037248);
+            
+        
+
+        marker_6c624b24b4981d034d0eced23b96f107.bindPopup(popup_49a600645b4fa6511fae13a58396ae66)
+        ;
+
+        
+    
+    
+                marker_6c624b24b4981d034d0eced23b96f107.setIcon(icon_9741d475ac449f68cde47994a0159418);
+            
+    
+            var marker_ba7d7e5a4408340b19fe40f5f16dd450 = L.marker(
+                [-23.548174, -46.649565],
+                {
+}
+            ).addTo(map_3f9c8acf22e74137213606f8dc6491b3);
+        
+    
+            var icon_deef720a4b54c212794692225cd64867 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_12ef6103af7e58c95d15cab961a31e3c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f32cf81e9ff5350cd8ef9e662fd39f2a = $(`<div id="html_f32cf81e9ff5350cd8ef9e662fd39f2a" style="width: 100.0%; height: 100.0%;">CAIO PRADO B/C</div>`)[0];
+                popup_12ef6103af7e58c95d15cab961a31e3c.setContent(html_f32cf81e9ff5350cd8ef9e662fd39f2a);
+            
+        
+
+        marker_ba7d7e5a4408340b19fe40f5f16dd450.bindPopup(popup_12ef6103af7e58c95d15cab961a31e3c)
+        ;
+
+        
+    
+    
+                marker_ba7d7e5a4408340b19fe40f5f16dd450.setIcon(icon_deef720a4b54c212794692225cd64867);
+            
+    
+            var marker_a57547560fea9cffabad5968569b86c9 = L.marker(
+                [-23.532629, -46.657465],
+                {
+}
+            ).addTo(map_3f9c8acf22e74137213606f8dc6491b3);
+        
+    
+            var icon_f750d752ed877f53967be052b99ebcf5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_105bea8916afef2f9d60c0f4b84ec1f8 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c9897d8e367d26e3d7f036e89b502dfe = $(`<div id="html_c9897d8e367d26e3d7f036e89b502dfe" style="width: 100.0%; height: 100.0%;">ROSA E SILVA C/B</div>`)[0];
+                popup_105bea8916afef2f9d60c0f4b84ec1f8.setContent(html_c9897d8e367d26e3d7f036e89b502dfe);
+            
+        
+
+        marker_a57547560fea9cffabad5968569b86c9.bindPopup(popup_105bea8916afef2f9d60c0f4b84ec1f8)
+        ;
+
+        
+    
+    
+                marker_a57547560fea9cffabad5968569b86c9.setIcon(icon_f750d752ed877f53967be052b99ebcf5);
+            
+    
+            var marker_03e842a3f191e61c0bea12f15490546e = L.marker(
+                [-23.531864, -46.660859],
+                {
+}
+            ).addTo(map_3f9c8acf22e74137213606f8dc6491b3);
+        
+    
+            var icon_b296af3db10feb67656c0aee01973621 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c29e58878e0354443ce1991e3a48aa9c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_58b3459d90f5e3e62a0f6e1093e3b25b = $(`<div id="html_58b3459d90f5e3e62a0f6e1093e3b25b" style="width: 100.0%; height: 100.0%;">PACAEMBU C/B</div>`)[0];
+                popup_c29e58878e0354443ce1991e3a48aa9c.setContent(html_58b3459d90f5e3e62a0f6e1093e3b25b);
+            
+        
+
+        marker_03e842a3f191e61c0bea12f15490546e.bindPopup(popup_c29e58878e0354443ce1991e3a48aa9c)
+        ;
+
+        
+    
+    
+                marker_03e842a3f191e61c0bea12f15490546e.setIcon(icon_b296af3db10feb67656c0aee01973621);
+            
+    
+            var marker_76fdc176b12835ef82fe97e114c6a8fb = L.marker(
+                [-23.536498, -46.650579],
+                {
+}
+            ).addTo(map_3f9c8acf22e74137213606f8dc6491b3);
+        
+    
+            var icon_a95cd04a4f11e6189ead10df1ce56f7d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_95cd80a9a95969de6771dcb28dd9b108 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_60d681223ec4bbe29d2a471e02f3d543 = $(`<div id="html_60d681223ec4bbe29d2a471e02f3d543" style="width: 100.0%; height: 100.0%;">NOTHMANN C/B</div>`)[0];
+                popup_95cd80a9a95969de6771dcb28dd9b108.setContent(html_60d681223ec4bbe29d2a471e02f3d543);
+            
+        
+
+        marker_76fdc176b12835ef82fe97e114c6a8fb.bindPopup(popup_95cd80a9a95969de6771dcb28dd9b108)
+        ;
+
+        
+    
+    
+                marker_76fdc176b12835ef82fe97e114c6a8fb.setIcon(icon_a95cd04a4f11e6189ead10df1ce56f7d);
+            
+</script>
+</html>
